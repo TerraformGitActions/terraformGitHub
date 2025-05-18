@@ -11,9 +11,9 @@ jobs:
   terraform:
     name: Terraform Init & Plan
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: infra   # ✅ Ensures all Terraform commands run inside the infra folder
+    # defaults:
+    #   run:
+    #     working-directory: infra   # ✅ Ensures all Terraform commands run inside the infra folder
 
     steps:
       - name: Checkout code
