@@ -22,9 +22,9 @@ jobs:
       - name: Configure AWS credentials using OIDC
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::533267363671:role/Github_Federation
-          role-session-name: Github_Federation
-          aws-region: eu-central-1  
+          role-to-assume: arn:aws:iam::672275037966:role/GithubActions
+          role-session-name: GithubActions
+          aws-region: us-east-1
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -38,3 +38,7 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan -out=tfplan.binary
+
+
+      - name: Terraform apply
+        run: terraform apply --auto-approve
