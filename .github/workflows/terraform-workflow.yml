@@ -42,3 +42,13 @@ jobs:
 
       - name: Terraform apply
         run: terraform apply --auto-approve
+
+
+      - name: Upload EC2 private key as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ec2-private-key
+          path: ./gh-keypair.pem
+
+      - name: Print download link
+        run: echo "✅ Download your key from the [Actions Artifacts tab](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"
