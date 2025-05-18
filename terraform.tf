@@ -2,6 +2,15 @@ provider "aws" {
   region = "us-east-1"  # Change to your preferred region
 }
 
+# Backend config (place in a separate file or init block)
+terraform {
+  backend "s3" {
+    bucket = "my-terraform-state-bucket"
+    key    = "ec2/keypair-demo/terraform.tfstate"
+    region = "us-east-1"
+  }
+}
+
 # Create a VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
@@ -49,3 +58,34 @@ resource "aws_security_group" "ssh" {
     cidr_blocks = ["0.0.0.0/0"]  # Restrict this in production!
   }
 }
+
+
+
+resource "tls_private_key" "ec2_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+resource "aws_key_pair" "ec2_key_pair" {
+  key_name   = "gh-keypair"
+  public_key = tls_private_key.ec2_key.public_key_openssh
+}
+
+resource "local_file" "private_key" {
+  content              = tls_private_key.ec2_key.private_key_pem
+  filename             = "${path.module}/gh-keypair.pem"
+  file_permission      = "0600"
+  depends_on           = [tls_private_key.ec2_key]
+}
+
+resource "aws_instance" "demo" {
+  ami           = "ami-0c55b159cbfafe1f0" # Example Amazon Linux 2 AMI
+  instance_type = "t2.micro"
+  key_name      = aws_key_pair.ec2_key_pair.key_name
+
+  tags = {
+    Name = "GitHubEC2"
+  }
+}
+
+
