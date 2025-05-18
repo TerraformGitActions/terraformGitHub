@@ -48,6 +48,3 @@ resource "aws_security_group" "ssh" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]  # Restrict this in production!
   }
-
-  egress {
-    from_port   =_
