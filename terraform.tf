@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "us-east-1"  # Change to your preferred region
+  region = "us-east-2"  # Change to your preferred region
 }
 
 # Backend config (place in a separate file or init block)
